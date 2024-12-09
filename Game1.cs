@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace Monogame___Animation_with_Classes
 {
@@ -10,18 +12,14 @@ namespace Monogame___Animation_with_Classes
         private SpriteBatch _spriteBatch;
 
         Rectangle window;
+        Random generator;
 
 
-        Tribble tribble1, tribble2, tribble3, tribble4;
+        List<Tribble> tribbles;
 
         Texture2D tribbleBrownTexture;
-
         Texture2D tribbleCreamTexture;
-
         Texture2D tribbleGreyTexture;
-        Rectangle tribbleGreyRect;
-        Vector2 tribbleGreySpeed;
-
         Texture2D tribbleOrangeTexture;
 
 
@@ -40,16 +38,19 @@ namespace Monogame___Animation_with_Classes
             _graphics.PreferredBackBufferWidth = window.Width;  // set this value to the desired width of your window
             _graphics.PreferredBackBufferHeight = window.Height;   // set this value to the desired height of your window
             _graphics.ApplyChanges();
+            tribbles = new List<Tribble>();
+            generator = new Random();
 
-            tribbleGreyRect = new Rectangle(300, 10, 100, 100);
-            tribbleGreySpeed = new Vector2(2, 0);
 
             base.Initialize(); // content is loaded
 
-            tribble1 = new Tribble(tribbleGreyTexture, new Rectangle(300, 10, 100, 100), new Vector2(91, 100));
-            tribble2 = new Tribble(tribbleOrangeTexture, new Rectangle(300, 10, 100, 100), new Vector2(20, 50));
-            tribble3 = new Tribble(tribbleCreamTexture, new Rectangle(300, 10, 80, 90), new Vector2(40, 2));
-            tribble4 = new Tribble(tribbleBrownTexture, new Rectangle(300, 10, 400, 20), new Vector2(50, 20));
+            tribbles.Add (new Tribble(tribbleGreyTexture, new Rectangle(300, 10, 100, 100), new Vector2(91, 100)));
+            tribbles.Add (new Tribble(tribbleOrangeTexture, new Rectangle(300, 10, 100, 100), new Vector2(20, 50)));
+            tribbles.Add (new Tribble(tribbleCreamTexture, new Rectangle(300, 10, 80, 90), new Vector2(40, 2)));
+
+
+            for (int i = 0; i < 0.1; i++)
+                tribbles.Add (new Tribble(tribbleBrownTexture, new Rectangle(generator.Next(window.Width - 120), generator.Next(window.Height - 120), generator.Next (20, 120), generator.Next(20, 120)), new Vector2(generator.Next(-3, 3), generator.Next(-3, 3))));
 
         }
 
@@ -68,13 +69,8 @@ namespace Monogame___Animation_with_Classes
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            tribble1.Move(window);
-            tribble2.Move(window);
-            tribble3.Move(window);
-            tribble4.Move(window);
-
-           
-
+            for (int i = 0; i < tribbles.Count; i++)
+                tribbles[i].Move(window);
 
             base.Update(gameTime);
         }
@@ -83,12 +79,10 @@ namespace Monogame___Animation_with_Classes
         {
             GraphicsDevice.Clear(Color.ForestGreen);
 
-            // TODO: Add your drawing code here
+            
             _spriteBatch.Begin();
-            _spriteBatch.Draw(tribble1.Texture, tribble1.Rectangle, Color.White);
-            _spriteBatch.Draw(tribble2.Texture, tribble2.Rectangle, Color.White);
-            _spriteBatch.Draw(tribble3.Texture, tribble3.Rectangle, Color.White);
-            _spriteBatch.Draw(tribble4.Texture, tribble4.Rectangle, Color.White);
+            for (int i = 0; i < tribbles.Count; i++)
+                tribbles[i].Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
