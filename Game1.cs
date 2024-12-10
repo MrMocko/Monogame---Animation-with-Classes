@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Monogame___Animation_with_Classes
 {
@@ -16,11 +17,9 @@ namespace Monogame___Animation_with_Classes
 
 
         List<Tribble> tribbles;
+        List<Texture2D> tribbleTexture;
 
-        Texture2D tribbleBrownTexture;
-        Texture2D tribbleCreamTexture;
-        Texture2D tribbleGreyTexture;
-        Texture2D tribbleOrangeTexture;
+        
 
 
         public Game1()
@@ -39,18 +38,17 @@ namespace Monogame___Animation_with_Classes
             _graphics.PreferredBackBufferHeight = window.Height;   // set this value to the desired height of your window
             _graphics.ApplyChanges();
             tribbles = new List<Tribble>();
+            tribbleTexture = new List<Texture2D>();
             generator = new Random();
 
 
             base.Initialize(); // content is loaded
 
-            tribbles.Add (new Tribble(tribbleGreyTexture, new Rectangle(300, 10, 100, 100), new Vector2(91, 100)));
-            tribbles.Add (new Tribble(tribbleOrangeTexture, new Rectangle(300, 10, 100, 100), new Vector2(20, 50)));
-            tribbles.Add (new Tribble(tribbleCreamTexture, new Rectangle(300, 10, 80, 90), new Vector2(40, 2)));
+           
 
 
-            for (int i = 0; i < 0.1; i++)
-                tribbles.Add (new Tribble(tribbleBrownTexture, new Rectangle(generator.Next(window.Width - 120), generator.Next(window.Height - 120), generator.Next (20, 120), generator.Next(20, 120)), new Vector2(generator.Next(-3, 3), generator.Next(-3, 3))));
+            for (int i = 0; i < 500; i++)
+                tribbles.Add(new Tribble(tribbleTexture[generator.Next(tribbleTexture.Count)], new Rectangle(generator.Next(window.Width - 120), generator.Next(window.Height - 120), generator.Next (20, 120), generator.Next(20, 120)), new Vector2(generator.Next(-3, 3), generator.Next(-3, 3))));
 
         }
 
@@ -59,10 +57,10 @@ namespace Monogame___Animation_with_Classes
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            tribbleGreyTexture = Content.Load<Texture2D>("tribbleGrey");
-            tribbleBrownTexture = Content.Load<Texture2D>("tribbleBrown");
-            tribbleCreamTexture = Content.Load<Texture2D>("tribbleCream");
-            tribbleOrangeTexture = Content.Load<Texture2D>("tribbleOrange");
+           tribbleTexture.Add(Content.Load<Texture2D>("tribbleGrey"));
+           tribbleTexture.Add(Content.Load<Texture2D>("tribbleBrown"));
+           tribbleTexture.Add(Content.Load<Texture2D>("tribbleCream"));
+           tribbleTexture.Add(Content.Load<Texture2D>("tribbleOrange"));
         }
 
         protected override void Update(GameTime gameTime)
